@@ -1,13 +1,14 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CoreBase } from '@infor-up/m3-odin';
-import { SohoBusyIndicatorModule, SohoDataGridModule } from 'ids-enterprise-ng';
+import { SohoBusyIndicatorModule, SohoDataGridModule, SohoIconModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService } from 'ids-enterprise-ng';
 import { CustomersService } from '../../core/services/customers.services';
+import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
 
 
 @Component({
    selector: 'app-customers',
    standalone: true,
-   imports: [SohoDataGridModule, SohoBusyIndicatorModule],
+   imports: [SohoDataGridModule, SohoBusyIndicatorModule, SohoIconModule, SohoModalDialogModule, EditCustomerComponent],
    templateUrl: './customers.component.html',
    styleUrl: './customers.component.css'
 })
@@ -16,7 +17,8 @@ export class CustomersComponent extends CoreBase implements OnInit {
    columns: SohoDataGridColumn[] = [];
    dataset = signal<any[]>([]);
    isBusy = signal(false);
-   constructor(private customersService: CustomersService) {
+   public closeResult = '(N/A)';
+   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService) {
       super('AppComponent');
    }
 
@@ -35,7 +37,20 @@ export class CustomersComponent extends CoreBase implements OnInit {
                }
             }
          },
+         {
+            id: 'DeleteCustomer', name: 'Supprimer', field: 'DeleteCustomer', icon: 'delete', formatter: Soho.Formatters.Button, click: (_e: any, args: any) => {
+               console.log(_e, args);
+               this.deleteCustomer(args[0].item);
+            }
+         },
+         {
+            id: 'UpdateCustomer', name: 'Mettre à jour', field: 'UpdateCustomer', icon: 'edit', formatter: Soho.Formatters.Button, click: (_e: any, args: any) => {
+               console.log(_e, args);
+               this.updateCustomer(args[0].item);
+            }
+         }
       ];
+
       this.gridOptions = {
          columns: this.columns,
          filterable: true,
@@ -67,6 +82,58 @@ export class CustomersComponent extends CoreBase implements OnInit {
 
    private setBusy(isBusy: boolean) {
       this.isBusy.set(isBusy);
+   }
+
+
+   deleteCustomer(customer: any) {
+      const dialogRef = this.modalService
+         .message('<span class="message">Voulez-vous vraiment supprimer ce client ?</span>')
+         .buttons(
+            [{
+               text: 'YES', click: () => {
+                  dialogRef.close('YES');
+               }
+            },
+            {
+               text: 'NO', click: () => {
+                  dialogRef.close('NO');
+               }, isDefault: true
+            }])
+         .title('Suppression ' + customer.CUNM + ' (' + customer.CUNO + ')')
+         .open()
+         .afterClose((result: any) => {
+            this.closeResult = result;
+            if (this.closeResult === 'YES') {
+               console.log('Client supprimé');
+               //appel au service de suppression
+            } else {
+               console.log('Client non supprimé');
+            }
+         });
+   }
+
+   updateCustomer(customer: any) {
+      const dialogRef: SohoModalDialogRef<EditCustomerComponent> = this.modalService
+         .modal<EditCustomerComponent>(EditCustomerComponent)
+         .apply((comp) => {
+            comp.cuno = customer.CUNO ?? '';
+            comp.cunm = customer.CUNM ?? '';
+         })
+         .buttons(
+            [{
+               text: 'YES', click: () => {
+                  dialogRef.componentDialog?.saveChanges();
+                  dialogRef.close('YES');
+               }
+            },
+            {
+               text: 'NO', click: () => {
+                  dialogRef.close('NO');
+               }, isDefault: true
+            }])
+         .title('Mise à jour ' + customer.CUNM + ' (' + customer.CUNO + ')')
+         .open()
+         .afterClose((result: any) => { });
    }
 
 }

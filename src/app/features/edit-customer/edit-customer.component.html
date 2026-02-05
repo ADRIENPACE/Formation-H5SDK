@@ -1,0 +1,18 @@
+<div class="full-width column" role="main">
+   <div class="row">
+      <form>
+         <div class="six columns">
+            <div class="field">
+               <label for="cuno">Code client (CUNO)</label>
+               <input id="cuno" type="text" soho-input [isDisabled]="true" [(ngModel)]="cuno" name="cuno" disabled />
+            </div>
+         </div>
+         <div class="six columns">
+            <div class="field">
+               <label for="cunm">Désignation (CUNM)</label>
+               <input id="cunm" type="text" soho-input [(ngModel)]="cunm" name="cunm" />
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
