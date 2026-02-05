@@ -1,5 +1,4 @@
-# FormationSonepar
-
+# Formation H5 SDK
 Projet de **formation** pour créer des applications **H5 SDK Angular** avec le framework **ODIN Infor M3**.
 
 Ce dépôt sert de support d’apprentissage pour développer des mashups et applications web intégrées au client M3 H5 (Infor M3), en utilisant :

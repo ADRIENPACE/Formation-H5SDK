@@ -3,7 +3,7 @@
    "version": 1,
    "newProjectRoot": "projects",
    "projects": {
-      "formation-sonepar": {
+      "formation-H5-SDK": {
          "projectType": "application",
          "schematics": {
             "@schematics/angular:component": {
@@ -89,10 +89,10 @@
                "builder": "@angular-devkit/build-angular:dev-server",
                "configurations": {
                   "production": {
-                     "buildTarget": "formation-sonepar:build:production"
+                     "buildTarget": "formation-H5-SDK:build:production"
                   },
                   "development": {
-                     "buildTarget": "formation-sonepar:build:development"
+                     "buildTarget": "formation-H5-SDK:build:development"
                   }
                },
                "defaultConfiguration": "development"
