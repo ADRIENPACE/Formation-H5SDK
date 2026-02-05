@@ -14,9 +14,11 @@ export class EditCustomerComponent extends CoreBase {
    @Input() set cuno(value: string) {
       this.form.patchValue({ cuno: value ?? '' });
    }
+
    @Input() set cunm(value: string) {
       this.form.patchValue({ cunm: value ?? '' });
    }
+
    @Output() changesSaved = new EventEmitter<boolean>();
 
    form = new FormGroup({

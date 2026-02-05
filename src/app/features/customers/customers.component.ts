@@ -134,6 +134,12 @@ export class CustomersComponent extends CoreBase implements OnInit {
          .title('Mise à jour ' + customer.CUNM + ' (' + customer.CUNO + ')')
          .open()
          .afterClose((result: any) => { });
+
+      dialogRef.componentDialog?.changesSaved.subscribe((changesSaved: boolean) => {
+         this.toastService.show({
+            draggable: true, title: 'Information', message: 'Event resultat : ' + changesSaved, position: SohoToastService.TOP_RIGHT
+         });
+      });
    }
 
 }
