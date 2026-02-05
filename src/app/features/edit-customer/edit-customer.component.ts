@@ -1,21 +1,30 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CoreBase } from '@infor-up/m3-odin';
-import { SohoInputModule } from 'ids-enterprise-ng';
+import { SohoInputModule, SohoToastService } from 'ids-enterprise-ng';
 
 @Component({
    selector: 'app-edit-customer',
    standalone: true,
-   imports: [FormsModule, SohoInputModule],
+   imports: [ReactiveFormsModule, SohoInputModule],
    templateUrl: './edit-customer.component.html',
    styleUrl: './edit-customer.component.css'
 })
 export class EditCustomerComponent extends CoreBase {
-   @Input() cuno = '';
-   @Input() cunm = '';
+   @Input() set cuno(value: string) {
+      this.form.patchValue({ cuno: value ?? '' });
+   }
+   @Input() set cunm(value: string) {
+      this.form.patchValue({ cunm: value ?? '' });
+   }
    @Output() changesSaved = new EventEmitter<boolean>();
 
-   constructor() {
+   form = new FormGroup({
+      cuno: new FormControl({ value: '', disabled: true }, Validators.required),
+      cunm: new FormControl('', Validators.required)
+   });
+
+   constructor(private toastService: SohoToastService) {
       super('EditCustomerComponent');
    }
 
@@ -23,8 +32,10 @@ export class EditCustomerComponent extends CoreBase {
       console.log('EditCustomerComponent');
    }
 
-   @Input() saveChanges() {
+   saveChanges() {
       this.changesSaved.emit(true);
-      console.log('Changes saved');
+      this.toastService.show({
+         draggable: true, title: 'Information', message: 'Changements enregistrés', position: SohoToastService.TOP_RIGHT
+      });
    }
 }

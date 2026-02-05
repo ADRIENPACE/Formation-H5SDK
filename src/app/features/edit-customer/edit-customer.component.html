@@ -1,16 +1,21 @@
 <div class="full-width column" role="main">
    <div class="row">
-      <form>
+      <form [formGroup]="form">
          <div class="six columns">
             <div class="field">
                <label for="cuno">Code client (CUNO)</label>
-               <input id="cuno" type="text" soho-input [isDisabled]="true" [(ngModel)]="cuno" name="cuno" disabled />
+               <input id="cuno" type="text" soho-input formControlName="cuno" />
             </div>
          </div>
          <div class="six columns">
             <div class="field">
                <label for="cunm">Désignation (CUNM)</label>
-               <input id="cunm" type="text" soho-input [(ngModel)]="cunm" name="cunm" />
+               <input id="cunm" type="text" soho-input formControlName="cunm" />
+               @if(form.get('cunm')?.errors?.['required']) {
+               <div class="error" role="alert">
+                  Le champ Désignation (CUNM) est requis
+               </div>
+               }
             </div>
          </div>
       </form>

@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CoreBase } from '@infor-up/m3-odin';
-import { SohoBusyIndicatorModule, SohoDataGridModule, SohoIconModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService } from 'ids-enterprise-ng';
+import { SohoBusyIndicatorModule, SohoDataGridModule, SohoIconModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService, SohoToastService } from 'ids-enterprise-ng';
 import { CustomersService } from '../../core/services/customers.services';
 import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
 
@@ -18,7 +18,7 @@ export class CustomersComponent extends CoreBase implements OnInit {
    dataset = signal<any[]>([]);
    isBusy = signal(false);
    public closeResult = '(N/A)';
-   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService) {
+   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService, private toastService: SohoToastService) {
       super('AppComponent');
    }
 
