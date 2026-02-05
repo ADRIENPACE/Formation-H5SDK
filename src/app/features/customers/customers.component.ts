@@ -3,6 +3,7 @@ import { CoreBase } from '@infor-up/m3-odin';
 import { SohoBusyIndicatorModule, SohoDataGridModule, SohoIconModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService, SohoToastService } from 'ids-enterprise-ng';
 import { CustomersService } from '../../core/services/customers.services';
 import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
+import { IdmDataService, IIdmError } from '../../core/services/idm-data.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class CustomersComponent extends CoreBase implements OnInit {
    dataset = signal<any[]>([]);
    isBusy = signal(false);
    public closeResult = '(N/A)';
-   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService, private toastService: SohoToastService) {
+   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService, private toastService: SohoToastService,
+      private idmService: IdmDataService) {
       super('AppComponent');
    }
 
@@ -47,6 +49,12 @@ export class CustomersComponent extends CoreBase implements OnInit {
             id: 'UpdateCustomer', name: 'Mettre à jour', field: 'UpdateCustomer', icon: 'edit', formatter: Soho.Formatters.Button, click: (_e: any, args: any) => {
                console.log(_e, args);
                this.updateCustomer(args[0].item);
+            }
+         },
+         {
+            id: 'ViewCustomerDocuments', name: 'Voir', field: 'ViewCustomerDocuments', icon: 'show-item', formatter: Soho.Formatters.Button, click: (_e: any, args: any) => {
+               console.log(_e, args);
+               this.viewCustomerDocuments(args[0].item);
             }
          }
       ];
@@ -141,5 +149,14 @@ export class CustomersComponent extends CoreBase implements OnInit {
          });
       });
    }
-
+   viewCustomerDocuments(customer: any) {
+      this.idmService.searchItems().subscribe({
+         next: (response: any) => {
+            console.log(response);
+         },
+         error: (error: IIdmError) => {
+            console.error(error);
+         }
+      });
+   }
 }
