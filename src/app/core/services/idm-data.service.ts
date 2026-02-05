@@ -44,7 +44,7 @@ export class IdmDataService extends CoreBase {
       // Please note that ionApiUrl is not set here becuase in Devlopment we use a local relative path that goes to the proxy.
       /*if (HttpUtil.isLocalhost()) {
          this.logDebug('Setting development token');
-         formService.developmentSetEnvironmentContext({ isMultiTenant: true, ionApiUrl: null });
+         //formService.developmentSetEnvironmentContext({ isMultiTenant: true, ionApiUrl: null });
          ionApiService.setDevelopmentToken('INSERT_TOKEN_HERE');
       }*/
       // Comment out the line above before building for production. This line is only needed if the H5 client that you are using is not
