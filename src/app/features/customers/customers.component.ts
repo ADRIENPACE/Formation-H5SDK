@@ -8,7 +8,7 @@ import { EditCustomerComponent } from '../edit-customer/edit-customer.component'
 @Component({
    selector: 'app-customers',
    standalone: true,
-   imports: [SohoDataGridModule, SohoBusyIndicatorModule, SohoIconModule, SohoModalDialogModule, EditCustomerComponent],
+   imports: [SohoDataGridModule, SohoBusyIndicatorModule, SohoIconModule, SohoModalDialogModule],
    templateUrl: './customers.component.html',
    styleUrl: './customers.component.css'
 })
