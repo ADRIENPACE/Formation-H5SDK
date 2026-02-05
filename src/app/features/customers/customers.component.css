@@ -1,0 +1,3 @@
+.datagrid-container.paginated {
+   height: calc(100vh - 100px) !important;
+}
