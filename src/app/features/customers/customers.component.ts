@@ -4,6 +4,7 @@ import { SohoBusyIndicatorModule, SohoDataGridModule, SohoIconModule, SohoModalD
 import { CustomersService } from '../../core/services/customers.services';
 import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
 import { IdmDataService, IIdmError } from '../../core/services/idm-data.service';
+import { ApplicationService } from '@infor-up/m3-odin-angular';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class CustomersComponent extends CoreBase implements OnInit {
    dataset = signal<any[]>([]);
    isBusy = signal(false);
    public closeResult = '(N/A)';
-   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService, private toastService: SohoToastService,
+   constructor(private customersService: CustomersService, private modalService: SohoModalDialogService, private toastService: SohoToastService, private applicationService: ApplicationService,
       private idmService: IdmDataService) {
       super('AppComponent');
    }
@@ -55,6 +56,12 @@ export class CustomersComponent extends CoreBase implements OnInit {
             id: 'ViewCustomerDocuments', name: 'Voir', field: 'ViewCustomerDocuments', icon: 'show-item', formatter: Soho.Formatters.Button, click: (_e: any, args: any) => {
                console.log(_e, args);
                this.viewCustomerDocuments(args[0].item);
+            }
+         },
+         {
+            id: 'openCRS610', name: 'open program CRS610', field: 'openCRS610', icon: 'group-selection', formatter: Soho.Formatters.Button, click: (_e: any, args: any) => {
+               console.log(_e, args);
+               this.applicationService.launch('CRS610');
             }
          }
       ];
