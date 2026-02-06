@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { LOCALE_ID, APP_INITIALIZER, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Log } from '@infor-up/m3-odin';
@@ -26,8 +27,8 @@ function initializeIdsLocale(locale: string) {
 // Initialisation de la langue de traduction
 function initializeTranslate(translateService: TranslateService) {
    return () => {
-      translateService.setDefaultLang('fr-FR');
-      return translateService.use('fr-FR').toPromise();
+      translateService.setFallbackLang('fr-FR');
+      return firstValueFrom(translateService.use('fr-FR'));
    };
 }
 
@@ -52,7 +53,7 @@ bootstrapApplication(AppComponent, {
             prefix: './assets/i18n/',
             suffix: '.json',
          }),
-         defaultLanguage: 'fr-FR',
+         fallbackLang: 'fr-FR',
       }),
       {
          provide: APP_INITIALIZER,

@@ -3,13 +3,13 @@
       <form [formGroup]="form">
          <div class="six columns">
             <div class="field">
-               <label for="cuno">Code client (CUNO)</label>
+               <label for="cuno">{{ 'Customer_code' | translate }}</label>
                <input id="cuno" type="text" soho-input formControlName="cuno" />
             </div>
          </div>
          <div class="six columns">
             <div class="field">
-               <label for="cunm">Désignation (CUNM)</label>
+               <label for="cunm">{{ 'Customer_name' | translate }}</label>
                <input id="cunm" type="text" soho-input formControlName="cunm" />
                @if(form.get('cunm')?.errors?.['required']) {
                <div class="error" role="alert">

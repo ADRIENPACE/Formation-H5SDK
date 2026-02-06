@@ -1,3 +1,10 @@
 {
-   "Number_item": "Numéro d'article"
+   "Number_item": "Numéro d'article",
+   "Customer_code": "Code client",
+   "Customer_name": "Désignation",
+   "Customer_status": "Statut",
+   "Customer_actions": "Actions",
+   "Customer_view": "Voir",
+   "Customer_edit": "Mettre à jour",
+   "Customer_delete": "Supprimer"
 }

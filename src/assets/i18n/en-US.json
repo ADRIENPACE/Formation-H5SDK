@@ -1,3 +1,10 @@
 {
-   "Number_item": "Item number"
+   "Number_item": "Item number",
+   "Customer_code": "Customer code",
+   "Customer_name": "Customer name",
+   "Customer_status": "Customer status",
+   "Customer_actions": "Customer actions",
+   "Customer_view": "Customer view",
+   "Customer_edit": "Customer edit",
+   "Customer_delete": "Customer delete"
 }

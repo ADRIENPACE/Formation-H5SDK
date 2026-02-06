@@ -61,6 +61,42 @@ odin build
     `npm i @ngx-translate/core`
     `npm i @ngx-translate/http-loader`
 
+### Affichage du numéro de version du package
+
+La version de l’application est définie dans **`package.json`** (champ `"version"`, ex. `"0.0.0"`). Pour l’afficher dans l’app (footer, à propos, etc.) sans la dupliquer :
+
+1. **Exposer le `package.json` dans l’environment**  
+   Dans `src/environments/environment.ts` et `environment.prod.ts` :
+
+```typescript
+import { default as version } from '../../package.json';
+
+export const environment = {
+   appVersion: version,  // objet package.json (contient .version, .name, etc.)
+   // ...
+};
+```
+
+2. **Dans le composant**  
+   Lire la version via l’environment (le champ `version` du `package.json`) :
+
+```typescript
+import { environment } from '../environments/environment';
+
+// Dans la classe du composant :
+version = environment.appVersion?.version ?? '';
+```
+
+3. **Dans le template**  
+   Afficher la version (ex. dans un footer) :
+
+```html
+<footer class="app-version">v{{ version }}</footer>
+```
+
+- **`environment.appVersion`** : référence l’objet `package.json` (avec `version`, `name`, etc.). En build, `environment.ts` est remplacé par `environment.prod.ts` selon la config Angular.
+- Pour que l’import du JSON soit accepté par TypeScript, le `tsconfig` doit autoriser la résolution des modules JSON (souvent déjà le cas avec `"resolveJsonModule": true` dans `tsconfig.json`).
+
 ### Framework CSS Infor (IDS)
 
 - [Infor Design System](https://design.infor.com/)
@@ -242,6 +278,26 @@ Angular 17+ propose une **nouvelle syntaxe de contrôle de flux** dans les templ
 ```
 
 Cette syntaxe remplace progressivement `*ngIf`, `*ngFor` et `*ngSwitch` dans les templates Angular.
+
+### Traduction (ngx-translate) et pipe `translate`
+
+Avec **ngx-translate**, les textes de l’interface sont externalisés dans des fichiers JSON par langue (ex. `fr-FR.json`, `en-US.json`). Dans le template, on affiche la traduction d’une clé avec le **pipe `translate`** :
+
+```html
+{{ 'Customer_name' | translate }}
+```
+
+- **`'Customer_name'`** : clé de traduction définie dans les fichiers i18n (ex. `assets/i18n/fr-FR.json` : `"Customer_name": "Nom du client"`).
+- **`| translate`** : pipe qui prend la clé en entrée et renvoie la chaîne traduite selon la langue courante (définie via `TranslateService.use('fr-FR')` ou la config du module).
+- Si la clé n’existe pas, la clé elle-même est souvent affichée (ex. `Customer_name`).
+
+**Avec des paramètres** (interpolation dans la traduction) :
+
+```html
+{{ 'Hello_user' | translate:{ name: user.name } }}
+```
+
+Dans le JSON : `"Hello_user": "Bonjour, {{name}}"`. Le pipe remplace `{{name}}` par la valeur passée.
 
 ### Exemples d’utilisation du framework Odin
 

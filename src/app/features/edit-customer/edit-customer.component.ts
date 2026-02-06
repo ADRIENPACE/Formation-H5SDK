@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CoreBase } from '@infor-up/m3-odin';
+import { TranslateModule } from '@ngx-translate/core';
 import { SohoInputModule, SohoToastService } from 'ids-enterprise-ng';
 
 @Component({
    selector: 'app-edit-customer',
    standalone: true,
-   imports: [ReactiveFormsModule, SohoInputModule],
+   imports: [ReactiveFormsModule, SohoInputModule, TranslateModule],
    templateUrl: './edit-customer.component.html',
    styleUrl: './edit-customer.component.css'
 })

@@ -1,0 +1,6 @@
+.app-version {
+   font-size: 12px;
+   color: var(--ids-color-text-70, #6b7280);
+   margin-top: auto;
+   padding: 0.25rem 0.5rem;
+}
