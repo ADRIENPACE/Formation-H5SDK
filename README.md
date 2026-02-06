@@ -361,6 +361,59 @@ Dans le JSON : `"Hello_user": "Bonjour, {{name}}"`. Le pipe remplace `{{name}}` 
 
 ### Exemples d’utilisation du framework Odin
 
+#### Déclaration côté TypeScript
+
+```typescript
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+form = new FormGroup({
+  cuno: new FormControl({ value: '', disabled: true }, Validators.required),
+  cunm: new FormControl('', Validators.required)
+});
+```
+
+- **FormGroup** : conteneur qui associe un nom de champ à un **FormControl**.
+- **FormControl** : valeur initiale (ou `{ value: '', disabled: true }`), second argument optionnel = validateurs.
+
+#### Liaison côté HTML
+
+Sur `<form>` : **`[formGroup]="form"`**. Sur chaque `<input>` : **`formControlName="nomDuChamp"`**.
+
+```html
+<form [formGroup]="form">
+  <label for="cunm">Désignation</label>
+  <input id="cunm" type="text" formControlName="cunm" />
+  @if (form.get('cunm')?.errors?.['required']) {
+    <div class="error">Le champ est requis</div>
+  }
+</form>
+```
+
+#### Récupérer la valeur d'un input (TypeScript)
+
+- Un contrôle : `this.form.get('cunm')?.value` ou `this.form.value['cunm']`.
+- Toutes les valeurs : `this.form.value` (champs disabled exclus) ou `this.form.getRawValue()`.
+
+#### Changer la valeur d'un input (TypeScript)
+
+- Un ou plusieurs champs : `this.form.patchValue({ cunm: 'Nouvelle valeur' });` ou `this.form.patchValue({ cuno: 'X', cunm: 'Y' });`
+- Tout le formulaire : `this.form.setValue({ cuno: 'X', cunm: 'Y' });` (tous les champs requis).
+- Sur le contrôle : `this.form.get('cunm')?.setValue('Nouvelle valeur');`
+
+#### Utilitaires utiles
+
+| Méthode / propriété | Rôle |
+|----------------------|------|
+| `form.get('nom')` | Accès au FormControl (`.value`, `.setValue()`, `.errors`) |
+| `form.value` | Valeurs (champs disabled exclus) |
+| `form.getRawValue()` | Toutes les valeurs |
+| `form.patchValue({ ... })` | Met à jour un ou plusieurs champs |
+| `form.setValue({ ... })` | Remplace toutes les valeurs |
+| `form.get('cunm')?.errors` | Erreurs de validation (ex. `{ required: true }`) |
+| `form.valid` / `form.invalid` | État de validité du groupe |
+
+Le composant **edit-customer** de ce projet illustre l'usage d'un `FormGroup` avec `formControlName` dans le template, `patchValue` dans les setters des `@Input()`, et l'affichage des erreurs de validation.
+
 - [Samples Odin (soho-app)](https://github.com/infor-cloud/m3-h5-sdk/tree/master/m3-odin/src/app/soho-app/samples)
 
 ---
