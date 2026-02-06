@@ -354,6 +354,8 @@ this.userService.getUserContext().subscribe(
 - **`IUserContext`** : contient notamment `currentCompany` (CONO), `currentDivision` (DIVI), `currentLanguage`, `USID`. Le MIService utilise ce contexte pour les paramètres matrice des appels MI si on ne surcharge pas CONO/DIVI dans la requête.
 - En cas d’erreur, le second callback reçoit un objet avec `errorMessage`.
 
+### Exemples d’utilisation du framework Odin
+
 - [Samples Odin (soho-app)](https://github.com/infor-cloud/m3-h5-sdk/tree/master/m3-odin/src/app/soho-app/samples)
 
 ---
@@ -466,8 +468,6 @@ Avec **ngx-translate**, les textes de l’interface sont externalisés dans des 
 ```
 
 Dans le JSON : `"Hello_user": "Bonjour, {{name}}"`. Le pipe remplace `{{name}}` par la valeur passée.
-
-### Exemples d’utilisation du framework Odin
 
 #### Déclaration côté TypeScript
 
