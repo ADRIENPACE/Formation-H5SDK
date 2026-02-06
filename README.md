@@ -341,7 +341,7 @@ Cette syntaxe remplace progressivement `*ngIf`, `*ngFor` et `*ngSwitch` dans les
 
 ### Traduction (ngx-translate) et pipe `translate`
 
-Avec **ngx-translate**, les textes de l’interface sont externalisés dans des fichiers JSON par langue (ex. `fr-FR.json`, `en-US.json`). Dans le template, on affiche la traduction d’une clé avec le **pipe `translate`** :
+Avec **ngx-translate**, les textes de l’interface sont externalisés dans des fichiers JSON par langue (ex. `fr-FR.json`, `en-US.json`). Dans le template, on affiche la traduction d’une clé avec le **pipe `translate`** : pour l'utiliser, le composant doit importer **`TranslateModule`** (standalone : dans `imports` du `@Component`, ou dans le `NgModule`). Sans cet import, le pipe n'est pas reconnu.
 
 ```html
 {{ 'Customer_name' | translate }}
@@ -374,6 +374,8 @@ form = new FormGroup({
 
 - **FormGroup** : conteneur qui associe un nom de champ à un **FormControl**.
 - **FormControl** : valeur initiale (ou `{ value: '', disabled: true }`), second argument optionnel = validateurs.
+
+Pour que **`[formGroup]`** et **`formControlName`** fonctionnent dans le template, le composant doit importer **`ReactiveFormsModule`** (standalone : dans le tableau `imports` du décorateur `@Component`, ou dans un `NgModule`). Sans cet import, les directives du formulaire réactif ne sont pas reconnues.
 
 #### Liaison côté HTML
 
