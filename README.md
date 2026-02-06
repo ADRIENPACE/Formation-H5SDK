@@ -10,6 +10,51 @@ Documentation et dépôt officiel du SDK : **[M3 H5 SDK (infor-cloud/m3-h5-sdk)]
 
 ---
 
+## Structure du projet
+
+L’application Angular est organisée selon une structure par **dossiers fonctionnels** (app, core, features, shared) pour séparer la racine, les services globaux, les modules métier et les éléments réutilisables.
+
+```
+src/
+├── app/
+│   ├── app.component.ts | .html | .css     # Composant racine, shell de l’app
+│   ├── app-routing.module.ts              # Routes de l’application
+│   │
+│   ├── core/                              # Singleton services, gardes, intercepteurs
+│   │   └── services/
+│   │       ├── customers.services.ts      # Logique métier / appels MI clients
+│   │       └── idm-data.service.ts
+│   │
+│   ├── features/                          # Modules métier (par fonctionnalité)
+│   │   ├── customers/                     # Liste / écran clients
+│   │   │   ├── customers.component.ts | .html | .css
+│   │   │   └── ...
+│   │   └── edit-customer/                 # Édition d’un client
+│   │       ├── edit-customer.component.ts | .html | .css
+│   │       └── ...
+│   │
+│   └── shared/                            # (optionnel) Pipes, directives, composants réutilisables
+│       # ex. pipes, directives, boutons, champs communs
+│
+├── assets/                                # Fichiers statiques
+│   └── i18n/                              # Fichiers de traduction (fr-FR.json, en-US.json, …)
+├── environments/                           # Config par environnement (dev / prod)
+│   ├── environment.ts
+│   └── environment.prod.ts
+├── index.html
+├── main.ts
+└── styles.css
+```
+
+| Dossier | Rôle |
+|--------|------|
+| **app** | Racine : `AppComponent`, routing, layout global. |
+| **core** | Services injectables au niveau racine (ex. services métier, appels M3), gardes, intercepteurs. Importé une seule fois (ex. dans `AppModule` ou `app.config`). |
+| **features** | Un dossier par fonctionnalité (ex. `customers`, `edit-customer`). Chaque feature contient les composants, templates et tests liés à cette partie de l’app. |
+| **shared** | Éléments réutilisables dans plusieurs features : pipes, directives, composants UI communs (boutons, champs, etc.). Optionnel ; à créer quand le besoin apparaît. |
+
+---
+
 ## Installation et Informations
 
 ### Server Node.js
@@ -65,7 +110,7 @@ odin build
 
 La version de l’application est définie dans **`package.json`** (champ `"version"`, ex. `"0.0.0"`). Pour l’afficher dans l’app (footer, à propos, etc.) sans la dupliquer :
 
-1. **Exposer le `package.json` dans l’environment**  
+1. **Exposer le `package.json` dans l’environment**
    Dans `src/environments/environment.ts` et `environment.prod.ts` :
 
 ```typescript
@@ -77,7 +122,7 @@ export const environment = {
 };
 ```
 
-2. **Dans le composant**  
+2. **Dans le composant**
    Lire la version via l’environment (le champ `version` du `package.json`) :
 
 ```typescript
@@ -87,7 +132,7 @@ import { environment } from '../environments/environment';
 version = environment.appVersion?.version ?? '';
 ```
 
-3. **Dans le template**  
+3. **Dans le template**
    Afficher la version (ex. dans un footer) :
 
 ```html
