@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CoreBase } from '@infor-up/m3-odin';
-import { SohoBusyIndicatorModule, SohoDataGridModule, SohoIconModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService, SohoToastService } from 'ids-enterprise-ng';
+import { SohoBusyIndicatorModule, SohoComponentsModule, SohoDataGridModule, SohoEditorModule, SohoIconModule, SohoInputModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService, SohoToastService } from 'ids-enterprise-ng';
 import { CustomersService } from '../../core/services/customers.services';
 import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
 import { IdmDataService, IIdmError } from '../../core/services/idm-data.service';
@@ -10,7 +10,7 @@ import { ApplicationService } from '@infor-up/m3-odin-angular';
 @Component({
    selector: 'app-customers',
    standalone: true,
-   imports: [SohoDataGridModule, SohoBusyIndicatorModule, SohoIconModule, SohoModalDialogModule],
+   imports: [SohoDataGridModule, SohoBusyIndicatorModule, SohoIconModule, SohoModalDialogModule, SohoInputModule, SohoEditorModule],
    templateUrl: './customers.component.html',
    styleUrl: './customers.component.css'
 })
@@ -28,7 +28,13 @@ export class CustomersComponent extends CoreBase implements OnInit {
    ngOnInit() {
       this.columns = [
          { id: 'CUNO', name: 'N° Client', field: 'CUNO', filterType: 'text' },
-         { id: 'CUNM', name: 'Désignation', field: 'CUNM', filterType: 'text' },
+         {
+            id: 'CUNM', name: 'Désignation', field: 'CUNM', filterType: 'text',
+            editor: Soho.Editors.Input,
+            isEditable: (row, cell, value, col, rowData) => {
+               return true;
+            },
+         },
          {
             id: 'STAT', name: 'Statut', field: 'STAT', filterType: 'text', formatter: (row: number,
                cell: any, fieldValue: any, columnDef: SohoDataGridColumn, rowData: Object, api: SohoDataGridStatic) => {
@@ -70,9 +76,12 @@ export class CustomersComponent extends CoreBase implements OnInit {
          columns: this.columns,
          filterable: true,
          selectable: 'single',
-         cellNavigation: false,
+         cellNavigation: true,
+         editable: true,
          paging: true,
          pagesize: 100,
+         rowNavigation: true,
+         actionableMode: true,
          pagesizes: [100, 200, 500, 1000],
 
       };
@@ -165,5 +174,14 @@ export class CustomersComponent extends CoreBase implements OnInit {
             console.error(error);
          }
       });
+   }
+
+   onExitEditMode(event: SohoDataGridEditModeEvent) {
+      if (event.column.id === 'CUNM' && event.value !== event.oldValue) {
+         console.log("Column ID: " + event.column.id);
+         console.log("Old Value: " + event.oldValue);
+         console.log("New Value: " + event.value);
+         console.log("Row Data: " + JSON.stringify(event.item));
+      }
    }
 }
