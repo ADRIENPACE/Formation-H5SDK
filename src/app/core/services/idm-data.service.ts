@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CoreBase, HttpUtil, IIonApiRequest } from '@infor-up/m3-odin';
 import { FormService, IonApiService } from '@infor-up/m3-odin-angular';
 import { Observable, throwError } from 'rxjs';
-import { catchError, flatMap, map } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 
 export interface IIdmError {
    code: string;
@@ -42,11 +42,11 @@ export class IdmDataService extends CoreBase {
       // To automatically determine if H5 is running in multi tenant or not H5 might need to be updated
       // If Multitenant is set to true then ION API will be used by the data service in this sample
       // Please note that ionApiUrl is not set here becuase in Devlopment we use a local relative path that goes to the proxy.
-      /*if (HttpUtil.isLocalhost()) {
+      if (HttpUtil.isLocalhost()) {
          this.logDebug('Setting development token');
-         //formService.developmentSetEnvironmentContext({ isMultiTenant: true, ionApiUrl: null });
-         ionApiService.setDevelopmentToken('INSERT_TOKEN_HERE');
-      }*/
+         this.formService.developmentSetEnvironmentContext({ isMultiTenant: true, ionApiUrl: null });
+         this.ionApiService.setDevelopmentToken('0');
+      }
       // Comment out the line above before building for production. This line is only needed if the H5 client that you are using is not
       // multi tenant and you would like to test the code calling M3 through ION API.
    }
@@ -87,7 +87,7 @@ export class IdmDataService extends CoreBase {
 
    private executeRequest<T>(request: IIonApiRequest): Observable<T> {
       return this.formService.getEnvironmentContext().pipe(
-         flatMap(context => {
+         mergeMap(context => {
             const isMultiTenant = context.isMultiTenant;
             request.url = (isMultiTenant ? this.ionBaseUrl : this.proxyBaseUrl) + request.url;
             if (isMultiTenant) {
@@ -105,7 +105,7 @@ export class IdmDataService extends CoreBase {
          catchError((response) => {
             const error: IIdmError = response.error ? response.error.error : response;
             this.logError('Error: ' + JSON.stringify(error));
-            return throwError(error);
+            return throwError(() => error);
          })
       );
    }
