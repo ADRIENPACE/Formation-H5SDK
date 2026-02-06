@@ -31,16 +31,21 @@
                   "tsConfig": "tsconfig.app.json",
                   "assets": [
                      {
-                        "glob": "**/*",
+                        "glob": "**/theme-new-light.css",
                         "input": "src"
                      },
                      {
-                        "glob": "**/theme-new-light.css",
+                        "glob": "**/*",
                         "input": "./node_modules/ids-enterprise/dist/css",
                         "output": "/assets/ids-enterprise/css"
                      },
                      {
                         "glob": "fr-FR*",
+                        "input": "./node_modules/ids-enterprise/dist/js/cultures",
+                        "output": "/assets/ids-enterprise/js/cultures"
+                     },
+                     {
+                        "glob": "fr-CA*",
                         "input": "./node_modules/ids-enterprise/dist/js/cultures",
                         "output": "/assets/ids-enterprise/js/cultures"
                      },
