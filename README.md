@@ -67,6 +67,91 @@ odin build
 - [Enterprise NG — exemples sources](https://github.com/anhallbe/enterprise-ng/tree/master/src/app)
 - [Enterprise NG — DataGrid editors](https://anhallbe.github.io/enterprise-ng/datagrid-editors)
 
+### Exemple d'appel API M3 avec Odin (MIService)
+
+Appel d’une transaction MI (ex. **CRS610MI / GetBasicData**) pour récupérer les données de base d’un client. Le `MIService` d’Odin retourne un `Observable<IMIResponse>` ; on s’abonne avec `subscribe()` pour traiter la réponse ou l’erreur.
+
+```typescript
+import { IMIRequest, IMIResponse, MIRecord } from '@infor-up/m3-odin';
+import { MIService } from '@infor-up/m3-odin-angular';
+
+// Dans le composant : constructor(private miService: MIService) { }
+
+const inputRecord = new MIRecord();
+const customer = "ACME";
+inputRecord.setString("CUNO", customer);
+
+const request: IMIRequest = {
+  program: "CRS610MI",
+  transaction: "GetBasicData",
+  record: inputRecord,
+  outputFields: ["CUNM", "CUNO", "CUA1", "CUA2", "CUA3", "CUA4", "YREF", "CSCD"]
+};
+
+this.setBusy(true);
+this.miService.execute(request).subscribe(
+  (response: IMIResponse) => {
+    this.setBusy(false);
+    if (!response.hasError()) {
+      this.logInfo("Customer Basic data for " + customer);
+      const record: MIRecord = response.item as MIRecord;
+      const address1 = record["CUA1"];
+      const address2 = record["CUA2"];
+      this.logInfo("Address 1 " + address1);
+      this.logInfo("Address 2 " + address2);
+    } else {
+      this.handleError(response, customer);
+    }
+  },
+  (response) => {
+    this.setBusy(false);
+    this.handleError(response, customer);
+  }
+);
+```
+
+- **`MIRecord`** : enregistrement d’entrée (champs de la transaction MI).
+- **`IMIRequest`** : programme, transaction, enregistrement et `outputFields` (champs retournés).
+- **`miService.execute(request)`** : retourne un `Observable<IMIResponse>` ; le premier callback du `subscribe` reçoit la réponse, le second les erreurs (ex. échec HTTP).
+
+### Récupération du contexte utilisateur (UserService)
+
+Le **UserService** Odin expose `getUserContext()` pour récupérer les informations du profil M3 de l’utilisateur connecté (MNS150) : société (CONO), division (DIVI), langue, identifiant (USID), etc. Ce contexte est souvent chargé au démarrage de l’application.
+
+```typescript
+import { IUserContext } from '@infor-up/m3-odin';
+import { UserService } from '@infor-up/m3-odin-angular';
+
+// Dans le composant : constructor(private userService: UserService) { }
+// Propriété : userContext: IUserContext;
+
+this.userService.getUserContext().subscribe(
+  (userContext: IUserContext) => {
+    this.userContext = userContext;
+    const lang = userContext.currentLanguage;
+    const divi = userContext.currentDivision;
+    const cono = userContext.currentCompany;
+    const usid = userContext.USID;
+    this.logInfo(
+      "User context: " +
+        usid +
+        ", cono: " +
+        cono +
+        ", divi: " +
+        divi +
+        ", lang: " +
+        lang
+    );
+  },
+  (errorContext: IUserContext) => {
+    this.logError(errorContext.errorMessage);
+  }
+);
+```
+
+- **`IUserContext`** : contient notamment `currentCompany` (CONO), `currentDivision` (DIVI), `currentLanguage`, `USID`. Le MIService utilise ce contexte pour les paramètres matrice des appels MI si on ne surcharge pas CONO/DIVI dans la requête.
+- En cas d’erreur, le second callback reçoit un objet avec `errorMessage`.
+
 ---
 
 ## Concepts Angular : Observables, Signals et contrôle de flux (template)
