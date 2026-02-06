@@ -15,6 +15,30 @@ Documentation et dépôt officiel du SDK : **[M3 H5 SDK (infor-cloud/m3-h5-sdk)]
 
 ---
 
+## Index
+
+- [Structure du projet](#structure-du-projet)
+- [Installation et Informations](#installation-et-informations)
+  - [Server Node.js](#server-nodejs)
+  - [Framework Odin Infor H5 SDK](#framework-odin-infor-h5-sdk)
+  - [Commandes Odin](#commandes-odin)
+  - [Configuration pour le mode développement (proxy)](#configuration-pour-le-mode-développement-proxy)
+  - [Installation des modules](#installation-des-modules)
+  - [Mode standalone, imports des composants et bootstrap (main.ts)](#mode-standalone-imports-des-composants-et-bootstrap-maints)
+  - [Affichage du numéro de version du package](#affichage-du-numéro-de-version-du-package)
+  - [Framework CSS Infor (IDS)](#framework-css-infor-ids)
+  - [Exemple d'appel API M3 avec Odin (MIService)](#exemple-dappel-api-m3-avec-odin-miservice)
+  - [Récupération du contexte utilisateur (UserService)](#récupération-du-contexte-utilisateur-userservice)
+- [Concepts Angular : Observables, Signals et contrôle de flux (template)](#concepts-angular--observables-signals-et-contrôle-de-flux-template)
+  - [Observables (RxJS)](#observables-rxjs)
+  - [Signals (`signal()`)](#signals-signal)
+  - [Contrôle de flux dans le template : `@if`, `@else`, `@switch`](#contrôle-de-flux-dans-le-template--if-else-switch)
+  - [Traduction (ngx-translate) et pipe `translate`](#traduction-ngx-translate-et-pipe-translate)
+  - [FormGroup et formulaires réactifs](#exemples-dutilisation-du-framework-odin)
+  - [Exemples d'utilisation du framework Odin](#exemples-dutilisation-du-framework-odin)
+
+---
+
 ## Structure du projet
 
 L’application Angular est organisée selon une structure par **dossiers fonctionnels** (app, core, features, shared) pour séparer la racine, les services globaux, les modules métier et les éléments réutilisables.
