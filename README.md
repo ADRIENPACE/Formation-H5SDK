@@ -29,13 +29,13 @@ Documentation et dépôt officiel du SDK : **[M3 H5 SDK (infor-cloud/m3-h5-sdk)]
   - [Framework CSS Infor (IDS)](#framework-css-infor-ids)
   - [Exemple d'appel API M3 avec Odin (MIService)](#exemple-dappel-api-m3-avec-odin-miservice)
   - [Récupération du contexte utilisateur (UserService)](#récupération-du-contexte-utilisateur-userservice)
+  - [Exemples d'utilisation du framework Odin](#exemples-dutilisation-du-framework-odin)
 - [Concepts Angular : Observables, Signals et contrôle de flux (template)](#concepts-angular--observables-signals-et-contrôle-de-flux-template)
   - [Observables (RxJS)](#observables-rxjs)
   - [Signals (`signal()`)](#signals-signal)
   - [Contrôle de flux dans le template : `@if`, `@else`, `@switch`](#contrôle-de-flux-dans-le-template--if-else-switch)
   - [Traduction (ngx-translate) et pipe `translate`](#traduction-ngx-translate-et-pipe-translate)
   - [FormGroup et formulaires réactifs](#exemples-dutilisation-du-framework-odin)
-  - [Exemples d'utilisation du framework Odin](#exemples-dutilisation-du-framework-odin)
 
 ---
 
@@ -354,6 +354,8 @@ this.userService.getUserContext().subscribe(
 - **`IUserContext`** : contient notamment `currentCompany` (CONO), `currentDivision` (DIVI), `currentLanguage`, `USID`. Le MIService utilise ce contexte pour les paramètres matrice des appels MI si on ne surcharge pas CONO/DIVI dans la requête.
 - En cas d’erreur, le second callback reçoit un objet avec `errorMessage`.
 
+- [Samples Odin (soho-app)](https://github.com/infor-cloud/m3-h5-sdk/tree/master/m3-odin/src/app/soho-app/samples)
+
 ---
 
 ## Concepts Angular : Observables, Signals et contrôle de flux (template)
@@ -521,8 +523,6 @@ Sur `<form>` : **`[formGroup]="form"`**. Sur chaque `<input>` : **`formControlNa
 | `form.valid` / `form.invalid` | État de validité du groupe |
 
 Le composant **edit-customer** de ce projet illustre l'usage d'un `FormGroup` avec `formControlName` dans le template, `patchValue` dans les setters des `@Input()`, et l'affichage des erreurs de validation.
-
-- [Samples Odin (soho-app)](https://github.com/infor-cloud/m3-h5-sdk/tree/master/m3-odin/src/app/soho-app/samples)
 
 ---
 
