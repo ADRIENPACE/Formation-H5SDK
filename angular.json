@@ -31,11 +31,11 @@
                   "tsConfig": "tsconfig.app.json",
                   "assets": [
                      {
-                        "glob": "**/theme-new-light.css",
+                        "glob": "**/*",
                         "input": "src"
                      },
                      {
-                        "glob": "**/*",
+                        "glob": "**/theme-new-light.css",
                         "input": "./node_modules/ids-enterprise/dist/css",
                         "output": "/assets/ids-enterprise/css"
                      },
