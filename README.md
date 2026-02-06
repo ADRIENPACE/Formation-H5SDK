@@ -79,6 +79,36 @@ Les **Observables** permettent de gérer des flux de données asynchrones (évé
 - Dans Angular, les services comme `HttpClient` retournent des Observables. On utilise souvent les opérateurs RxJS (`map`, `catchError`, `switchMap`, etc.) pour transformer ou combiner ces flux.
 - Pour éviter les fuites mémoire, il faut se désabonner (ou utiliser `async` dans le template, ou `takeUntilDestroyed()`).
 
+**Exemple : `subscribe` avec `next`, `error` et `complete`**
+
+On peut passer un objet à `subscribe()` avec les callbacks `next`, `error` et `complete` :
+
+```typescript
+import { Observable, of } from 'rxjs';
+
+// Exemple : un Observable qui émet une valeur puis se termine
+const source$: Observable<string> = of('Hello', 'World');
+
+const subscription = source$.subscribe({
+  next: (value) => {
+    console.log('Valeur reçue:', value);  // "Hello" puis "World"
+  },
+  error: (err) => {
+    console.error('Erreur:', err);
+  },
+  complete: () => {
+    console.log('Flux terminé');
+  }
+});
+
+// Penser à se désabonner si l'Observable ne se termine pas (ex. dans ngOnDestroy)
+// subscription.unsubscribe();
+```
+
+- **`next`** : appelé à chaque valeur émise par l’Observable.
+- **`error`** : appelé en cas d’erreur (le flux s’arrête).
+- **`complete`** : appelé quand l’Observable se termine sans erreur.
+
 ### Signals (`signal()`)
 
 Les **Signals** sont un mécanisme de réactivité introduit dans Angular 16+. Un signal est une valeur réactive : quand elle change, Angular met à jour uniquement les parties du template qui en dépendent.
