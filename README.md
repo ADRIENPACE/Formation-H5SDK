@@ -97,6 +97,16 @@ odin serve
 odin build
 ```
 
+### Configuration pour le mode développement (proxy)
+
+Pour que le **proxy** fonctionne en mode développement (avec `odin serve`), il faut disposer d’un fichier **`odin.json`** à la racine du projet. Ce fichier n’est pas versionné (il peut contenir des URLs tenant spécifiques).
+
+1. **Copier le template** : renommer ou copier **`odin.json.example`** en **`odin.json`**.
+2. **Renseigner votre tenant** : dans `odin.json`, remplacer toutes les occurrences de **`YOUR_TENANT`** par l’identifiant de votre tenant (ex. `MONTENANT`, ou l’ID fourni par votre environnement Infor).
+3. Lancer le serveur : `odin serve` (ou `odin serve --multi-tenant --ion-api` selon votre besoin).
+
+Sans `odin.json` correctement configuré, les appels vers l’API M3 (m3api-rest, mne, ca, etc.) ne seront pas proxifiés et le mode développement peut échouer.
+
 ### Installation des modules
 
 - **Tous les dépendances du projet** (depuis la racine du projet) :

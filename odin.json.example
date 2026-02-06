@@ -1,0 +1,34 @@
+{
+  "projectName": "formation-H5-SDK",
+  "m3Url": "https://mingle-ionapi.eu1.inforcloudsuite.com/YOUR_TENANT",
+  "portalUrl": "https://mingle-portal.eu1.inforcloudsuite.com/YOUR_TENANT",
+  "proxy": {
+    "/m3api-rest": {
+      "target": "https://mingle-ionapi.eu1.inforcloudsuite.com/YOUR_TENANT",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/mne": {
+      "target": "https://mingle-ionapi.eu1.inforcloudsuite.com/YOUR_TENANT",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/ca": {
+      "target": "https://mingle-ionapi.eu1.inforcloudsuite.com/YOUR_TENANT",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/ODIN_DEV_TENANT": {
+      "target": "https://mingle-ionapi.eu1.inforcloudsuite.com/YOUR_TENANT",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/ODIN_DEV_TENANT": ""
+      },
+      "logLevel": "debug"
+    }
+  }
+}
