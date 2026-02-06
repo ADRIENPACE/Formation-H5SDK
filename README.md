@@ -114,12 +114,94 @@ Sans `odin.json` correctement configuré, les appels vers l’API M3 (m3api-rest
 
 - **Option `-g` (global)** : installe le package **globalement** sur la machine, et non dans le dossier `node_modules` du projet. Utile pour les **outils en ligne de commande** (ex. `@infor-up/m3-odin-cli`, `@angular/cli`) que vous voulez utiliser dans n’importe quel projet. Sans `-g`, le package est installé **localement** au projet et enregistré dans `package.json`.
 
-- **Installation d’un module précis** :
+- **Installation d'un module précis** :
   - En global (ex. outil CLI) :
     `npm i -g @infor-up/m3-odin-cli`
   - En local (ex. librairies pour le projet) :
     `npm i @ngx-translate/core`
     `npm i @ngx-translate/http-loader`
+
+### Mode standalone, imports des composants et bootstrap (main.ts)
+
+Ce projet utilise le **mode standalone** d’Angular : les composants ne sont pas déclarés dans un `NgModule`, ils sont autonomes et déclarent eux-mêmes leurs dépendances.
+
+#### Composants standalone : `standalone: true` et tableau `imports`
+
+Dans un composant standalone, le décorateur `@Component` contient :
+
+- **`standalone: true`** : le composant n’appartient à aucun `NgModule` ; il peut être utilisé directement (dans un autre composant ou comme racine de l’app).
+- **`imports: [ ... ]`** : liste des **modules**, **directives**, **pipes** ou **composants** dont le **template** a besoin. Tout ce qui est utilisé dans le HTML (directives comme `formGroup` / `formControlName`, pipes comme `translate`, composants enfants, modules UI comme `SohoInputModule`) doit figurer dans ce tableau.
+
+Exemple (composant **edit-customer**) :
+
+```typescript
+@Component({
+   selector: 'app-edit-customer',
+   standalone: true,
+   imports: [ReactiveFormsModule, SohoInputModule, TranslateModule],
+   templateUrl: './edit-customer.component.html',
+   styleUrl: './edit-customer.component.css'
+})
+export class EditCustomerComponent {
+   // ...
+}
+```
+
+- **`ReactiveFormsModule`** : nécessaire pour `[formGroup]` et `formControlName` dans le template.
+- **`TranslateModule`** : nécessaire pour le pipe `translate` dans le template.
+- **`SohoInputModule`** : composants IDS (ex. `soho-input`) utilisés dans le template.
+
+Sans l’import correspondant, Angular ne reconnaît pas la directive, le pipe ou le composant et une erreur s’affiche au runtime ou à la compilation.
+
+#### Constructeur : injection de services (pas d’import de modules)
+
+Le **constructeur** du composant sert à l’**injection de dépendances** pour les **services** (et autres fournisseurs), pas à importer des modules pour le template.
+
+```typescript
+constructor(private toastService: SohoToastService) {
+   super('EditCustomerComponent');
+}
+```
+
+- **`private toastService: SohoToastService`** : Angular injecte le service `SohoToastService` et le stocke dans la propriété `toastService`, utilisable dans la classe (ex. `this.toastService.show(...)`).
+- Les **modules** (ReactiveFormsModule, TranslateModule, etc.) se mettent dans **`imports`** du `@Component` ; les **services** (MIService, UserService, SohoToastService, etc.) s’injectent via le **constructeur** (ou `inject()`).
+
+#### Bootstrap et configuration globale : `main.ts`
+
+Le point d’entrée de l’application est **`src/main.ts`**. Il utilise **`bootstrapApplication()`** (sans `NgModule`) et configure les **providers** globaux :
+
+```typescript
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { provideTranslateService, provideTranslateHttpLoader } from '@ngx-translate/core';
+import { importProvidersFrom } from '@angular/core';
+import { M3OdinModule } from '@infor-up/m3-odin-angular';
+
+bootstrapApplication(AppComponent, {
+   providers: [
+      provideHttpClient(),
+      provideRouter([]),
+      provideTranslateService({
+         loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
+         fallbackLang: 'fr-FR',
+      }),
+      importProvidersFrom(M3OdinModule),
+      // Autres services globaux : SohoToastService, SohoModalDialogService, etc.
+   ]
+}).catch(err => console.error(err));
+```
+
+- **`bootstrapApplication(AppComponent, { providers: [...] })`** : démarre l’app avec `AppComponent` comme racine, sans `AppModule`.
+- **`providers`** : services et configuration disponibles dans **toute l’application** (injectables dans n’importe quel composant ou service). Exemples :
+  - **`provideHttpClient()`** : permet d’injecter `HttpClient`.
+  - **`provideRouter([])`** : configure le routeur (tableau de routes).
+  - **`provideTranslateService({ ... })`** : configure ngx-translate (loader, langue par défaut).
+  - **`importProvidersFrom(M3OdinModule)`** : rend disponibles les services du module Odin (MIService, UserService, etc.) pour l’injection dans les constructeurs.
+- Les **modules** utilisés uniquement dans un template (ex. ReactiveFormsModule, TranslateModule) sont importés dans le **composant** (`imports` du `@Component`). Les **services** ou config utilisés au niveau racine sont fournis dans **`main.ts`** via **`providers`**.
+
+En résumé : **standalone** = composant autonome ; **`imports`** = ce dont le template a besoin (modules, pipes, directives, composants) ; **constructeur** = injection de services ; **main.ts** = bootstrap et providers globaux.
 
 ### Affichage du numéro de version du package
 
