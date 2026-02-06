@@ -1,6 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { CoreBase } from '@infor-up/m3-odin';
-import { SohoBusyIndicatorModule, SohoComponentsModule, SohoDataGridModule, SohoEditorModule, SohoIconModule, SohoInputModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService, SohoToastService } from 'ids-enterprise-ng';
+import { SohoBusyIndicatorModule, SohoComponentsModule, SohoDataGridComponent, SohoDataGridModule, SohoEditorModule, SohoIconModule, SohoInputModule, SohoModalDialogModule, SohoModalDialogRef, SohoModalDialogService, SohoToastService } from 'ids-enterprise-ng';
 import { CustomersService } from '../../core/services/customers.services';
 import { EditCustomerComponent } from '../edit-customer/edit-customer.component';
 import { IdmDataService, IIdmError } from '../../core/services/idm-data.service';
@@ -15,6 +15,7 @@ import { ApplicationService } from '@infor-up/m3-odin-angular';
    styleUrl: './customers.component.css'
 })
 export class CustomersComponent extends CoreBase implements OnInit {
+   @ViewChild(SohoDataGridComponent) dataGrid?: SohoDataGridComponent;
    gridOptions: SohoDataGridOptions = {};
    columns: SohoDataGridColumn[] = [];
    dataset = signal<any[]>([]);
@@ -182,6 +183,11 @@ export class CustomersComponent extends CoreBase implements OnInit {
          console.log("Old Value: " + event.oldValue);
          console.log("New Value: " + event.value);
          console.log("Row Data: " + JSON.stringify(event.item));
+         //déplacer le focus sur la cellule suivante
+         const activeCell = this.dataGrid.getActiveCell();
+         if (activeCell) {
+            this.dataGrid?.setActiveCell(activeCell.row + 2, activeCell.cell);
+         }
       }
    }
 }
