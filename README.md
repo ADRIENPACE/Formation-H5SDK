@@ -8,6 +8,11 @@ Ce dépôt sert de support d’apprentissage pour développer des mashups et app
 
 Documentation et dépôt officiel du SDK : **[M3 H5 SDK (infor-cloud/m3-h5-sdk)](https://github.com/infor-cloud/m3-h5-sdk)**
 
+### À propos du README et du CHANGELOG
+
+- **README.md** (ce fichier) : point d’entrée de la documentation du projet. Il décrit le contexte (formation H5 SDK / Odin M3), la structure du projet, les instructions d’installation et de configuration, ainsi que des exemples de code (Observables, appels API M3, UserContext, traduction, version, etc.). À consulter en premier pour démarrer ou pour retrouver un exemple.
+- **CHANGELOG.md** : historique des versions et des modifications notables (nouvelles fonctionnalités, changements, corrections). Chaque release y est datée et classée par catégories (Added, Changed, Fixed, etc.), selon le format [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/). Utile pour savoir ce qui a changé entre deux versions et pour communiquer les évolutions aux utilisateurs ou à l’équipe.
+
 ---
 
 ## Structure du projet
